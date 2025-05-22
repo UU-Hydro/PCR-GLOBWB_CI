@@ -1,0 +1,2 @@
+# PCR-GLOBWB Continuous Integration
+This repository serves to support the development of the [PCR-GLOBWB model](https://github.com/UU-Hydro/PCR-GLOBWB_model). Specifically, this repository provides the input and output reference data for the system tests of PCR-GLOBWB (i.e. test that check the model outputs match the reference outputs) and scripts related to generating this data.
