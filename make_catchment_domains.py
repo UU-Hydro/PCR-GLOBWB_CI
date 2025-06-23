@@ -1,21 +1,28 @@
 import pathlib as pl
 import pcraster as pcr
 import numpy as np
+import matplotlib.pyplot as plt
 
-catchment_info = {'Rhine': (8.250252, 50.019294),
-                  'Po': (9.635126, 45.125454),
-                  'Nile': (32.532726, 13.602599),
-                  'Mekong': (105.821708, 14.184366),
-                  'Ob': (75.599976, 61.018402),
-                  'Mississippi': (-91.046615, 33.958904),
-                  'Donau': (18.842317, 45.894651), }
-ldd_info = {'30min': pl.Path('input/ldd/lddsound_30min.map'),
-            '05min': pl.Path('input/ldd/lddsound_05min.map'),
-            '30sec': pl.Path('input/ldd/lddsound_30sec_version_202005XX.map'), }
-out_dir = pl.Path('saves/domains')
+catchment_info = {
+    "Rhine": (8.250252, 50.019294),
+    "Scheldt": (4.328357, 51.153557),
+    "Po": (9.635126, 45.125454),
+    "Nile": (32.532726, 13.602599),
+    "Mekong": (105.821708, 14.184366),
+    "Ob": (75.599976, 61.018402),
+    "Mississippi": (-91.046615, 33.958904),
+    "Donau": (18.842317, 45.894651),
+}
+ldd_info = {
+    "30min": pl.Path("input/ldd/lddsound_30min.map"),
+    "05min": pl.Path("input/ldd/lddsound_05min.map"),
+    "30sec": pl.Path("input/ldd/lddsound_30sec_version_202005XX.map"),
+}
+out_dir = pl.Path("saves/domains")
 
+resolution, ldd_file = next(iter(ldd_info.items()))
 for resolution, ldd_file in ldd_info.items():
-    print(f'resolution: {resolution}')
+    print(f"resolution: {resolution}")
 
     pcr.setclone(str(ldd_file))
 
@@ -35,8 +42,9 @@ for resolution, ldd_file in ldd_info.items():
     catchments = pcr.catchment(ldd, pit)
     catchments = pcr.pcr2numpy(catchments, 0)
 
+    name, point = next(iter(catchment_info.items()))
     for name, point in catchment_info.items():
-        print(f'name: {name}')
+        print(f"name: {name}")
 
         point_lat = point[1]
         point_lon = point[0]
@@ -63,16 +71,19 @@ for resolution, ldd_file in ldd_info.items():
         domain_nrRows = len(domain_lats)
         domain_nrCols = len(domain_lons)
 
-        domain_mask = mask[domain_lat_sel, :][:, domain_lon_sel]
-        pcr.setclone(domain_nrRows,
-                     domain_nrCols,
-                     cellSize,
-                     domain_west,
-                     domain_north)
+        domain_mask = mask[domain_lat_sel, :][:, domain_lon_sel].copy()
+
+        # plt.imshow(domain_mask)
+        # plt.title(f"domain_mask: {name}")
+        # plt.colorbar()
+        # plt.show()
+
+        pcr.setclone(
+            domain_nrRows, domain_nrCols, cellSize, domain_west, domain_north
+        )
         domain_mask = pcr.numpy2pcr(pcr.Boolean, domain_mask, False)
 
-        mask_out = out_dir / f'domain_{name}_{resolution}.map'
-
+        mask_out = out_dir / f"domain_{name}_{resolution}.map"
         mask_out.parent.mkdir(parents=True, exist_ok=True)
         pcr.report(domain_mask, str(mask_out))
-        print(f'mask_out: {mask_out}')
+        print(f"mask_out: {mask_out}")
