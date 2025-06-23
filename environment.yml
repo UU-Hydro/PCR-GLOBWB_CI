@@ -1,0 +1,13 @@
+name: PCR-GLOBWB_CI
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - netCDF4
+  - pcraster
+  - xarray
+  - gitpython
