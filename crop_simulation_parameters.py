@@ -51,6 +51,7 @@ def crop_pcraster_file(
     domain_nrRows = len(domain_lats)
     domain_nrCols = len(domain_lons)
 
+    pcr.setclone(str(file))
     pcr_map = pcr.readmap(str(file))
     data_type = pcr_map.dataType()
     if data_type == pcr.Scalar:
@@ -67,7 +68,7 @@ def crop_pcraster_file(
         raise ValueError(f"Unknown data type: {data_type}")
     pcr_map = pcr.pcr2numpy(pcr_map, missing_value)
 
-    domain_map = pcr_map[domain_lat_sel, :][:, domain_lon_sel]
+    domain_map = pcr_map[domain_lat_sel, :][:, domain_lon_sel].copy()
     pcr.setclone(
         domain_nrRows, domain_nrCols, cellSize, domain_west, domain_north
     )
