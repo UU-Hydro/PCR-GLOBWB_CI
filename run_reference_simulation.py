@@ -4,114 +4,114 @@ import shutil as sh
 import git
 
 simulation_dir = pl.Path("simulation")
-pcrglobwb_github = (
+model_dir = pl.Path("pcrglobwb")
+conda_dir = pl.Path("conda")
+
+model_github = (
     "https://{username}:{token}@github.com/UU-Hydro/PCR-GLOBWB_model.git"
 )
 commit = "2e3a5d85b0a1c264c7cb22dbc864bce87d115053"
 
-# pcrglobwb_github = (
-#     "https://{username}:{token}@github.com/UU-Hydro/PCR-GLOBWB_3.git"
-# )
-
-pcrglobwb_subdir = pl.Path("pcrglobwb")
-conda_subdir = pl.Path("conda")
+# model_subdir = pl.Path("pcrglobwb")
+# conda_subdir = pl.Path("conda")
+bare_subdir = pl.Path("bare")
 reference_subdir = pl.Path("reference")
 parameter_subdir = pl.Path("parameters")
 
 username = os.environ.get("GITHUB_USERNAME")
 token = os.environ.get("GITHUB_TOKEN")
-pcrglobwb_github = pcrglobwb_github.format(username=username, token=token)
+model_github = model_github.format(username=username, token=token)
 
 simulations = simulation_dir.iterdir()
 simulations = sorted(simulations)
+
+print("setup pcrglobwb model")
+
+# Setup
+model_conda_file = model_dir / "conda_env" / "model_py3_standard.yml"
+model_runner_file = model_dir / "model" / "deterministic_runner.py"
+if not model_dir.exists():
+    _ = git.Repo.clone_from(
+        url=model_github,
+        to_path=model_dir,
+    )
+repo = git.Repo(model_dir)
+
+# Update
+repo.remotes.origin.fetch(refspec="refs/heads/master")
+repo.remotes.origin.pull(refspec="refs/heads/master")
+if commit == "latest":
+    commit = repo.git.log(n=1, pretty="format:%H")
+    print(f"> commit: {commit}")
+
+# Checkout
+repo.git.checkout(commit, force=True)
+
+print("setup conda environment")
+
+# Setup
+conda_commit_dir = conda_dir / commit
+if not conda_commit_dir.exists():
+    status = os.system(
+        f"conda env create \
+            --prefix {conda_commit_dir} \
+                --file {model_conda_file} 1> /dev/null"
+    )
+    if status != 0:
+        raise RuntimeError(f"> Failed: {status}")
 
 simulation = simulations[0]
 for simulation in simulations:
     print(f"simulation: {simulation}")
 
-    print("- setup pcrglobwb model")
-    pcrglobwb_dir = simulation / pcrglobwb_subdir
-    if pcrglobwb_dir.exists():
-        sh.rmtree(pcrglobwb_dir)
-    pcrglobwb_repo = git.Repo.clone_from(
-        url=pcrglobwb_github, to_path=pcrglobwb_dir
-    )
-    if commit == "latest":
-        commit = pcrglobwb_repo.git.log(n=1, pretty="format:%H")
-    pcrglobwb_repo.git.checkout(commit, force=True)
-    print(f"commit: {commit}")
+    # Setup
+    configuration_file = simulation / "configuration.ini"
+    simulation_parameter_dir = simulation / parameter_subdir
+    simulation_reference_dir = simulation / reference_subdir
+    simulation_commit_dir = simulation_reference_dir / commit
+    completed_out = simulation_commit_dir / "completed.txt"
+    configuration_out = simulation_commit_dir / "configuration.ini"
+    time_out = simulation_commit_dir / "time.txt"
+    out_out = simulation_commit_dir / "simulation.out"
+    err_out = simulation_commit_dir / "simulation.err"
 
-    print("- setup commit reference")
-    reference_dir = simulation / reference_subdir
-    reference_dir = reference_dir / commit
-    completed_file = reference_dir / "completed.txt"
-    if completed_file.exists():
-        sh.rmtree(pcrglobwb_dir)
+    # Check
+    if completed_out.exists():
         print(f"> Simulation already completed")
         continue
-    reference_dir.mkdir(parents=True, exist_ok=True)
 
-    print("- setup conda environment")
-    conda_dir = simulation / conda_subdir
-    if conda_dir.exists():
-        sh.rmtree(conda_dir)
-    environment_file = (
-        pcrglobwb_dir / "conda_env" / "pcrglobwb_py3_standard.yml"
-    )
-    if not environment_file.exists():
-        raise FileNotFoundError(
-            f"Environment file not found: {environment_file}"
-        )
-    return_value = os.system(
-        f"conda env create --prefix {conda_dir} --file {environment_file} 1> /dev/null"
-    )
-    if return_value != 0:
-        raise RuntimeError(f"Failed to create conda environment: {conda_dir}")
-
-    print("- setup simulation configuration")
-    configuration_file = simulation / "configuration.ini"
-    if not configuration_file.exists():
-        raise FileNotFoundError(
-            f"Configuration file not found: {configuration_file}"
-        )
-    configuration_out = reference_dir / "configuration.ini"
+    # Cleanup
+    simulation_commit_dir.mkdir(parents=True, exist_ok=True)
     if configuration_out.exists():
         configuration_out.unlink()
+    if time_out.exists():
+        time_out.unlink()
+    if out_out.exists():
+        out_out.unlink()
+    if err_out.exists():
+        err_out.unlink()
+
+    # Configuration
     sh.copy(configuration_file, configuration_out)
-    parameter_dir = simulation / parameter_subdir
-    if not parameter_dir.exists():
-        raise FileNotFoundError(
-            f"Parameter directory not found: {parameter_dir}"
-        )
     with open(configuration_out, "r") as f:
         configuration = f.read()
     configuration = configuration.format(
-        inputDir=parameter_dir.resolve(), outputDir=reference_dir.resolve()
+        inputDir=simulation_parameter_dir.resolve(),
+        outputDir=simulation_commit_dir.resolve(),
     )
     with open(configuration_out, "w") as f:
         f.write(configuration)
 
-    print("- run simulation")
-    runner_file = pcrglobwb_dir / "model" / "deterministic_runner.py"
-    if not runner_file.exists():
-        raise FileNotFoundError(f"Runner file not found: {runner_file}")
-    time_file = reference_dir / "time.txt"
-    if time_file.exists():
-        time_file.unlink()
-    out_file = reference_dir / "simulation.out"
-    if out_file.exists():
-        out_file.unlink()
-    err_file = reference_dir / "simulation.err"
-    if err_file.exists():
-        err_file.unlink()
-
-    return_value = os.system(
-        f"{{ time conda run --prefix {conda_dir} python {runner_file} {configuration_out} 1> {out_file} 2> {err_file} ; }} 2> {time_file}"
+    # Simulation
+    command = (
+        f"conda run --prefix {conda_commit_dir} "
+        f"python {model_runner_file} {configuration_out} "
+        f"1> {out_out} 2> {err_out}"
     )
-    if return_value != 0:
-        raise RuntimeError(f"Failed to run simulation: {runner_file}")
+    command = f"{{ time {command} ; }} 2> {time_out}"
+    status = os.system(command)
+    if status != 0:
+        raise RuntimeError(f"> Failed: {status}")
 
-    print("- cleanup")
-    sh.rmtree(pcrglobwb_dir)
-    sh.rmtree(conda_dir)
-    completed_file.touch()
+    # Completion
+    completed_out.touch()
