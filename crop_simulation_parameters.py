@@ -162,6 +162,8 @@ simulations = sorted(simulations)
 
 simulation = next(iter(simulations))
 for simulation in simulations:
+    if "invalid" in simulation.name:
+        continue
     print(f"simulation: {simulation}")
 
     configuration_file = simulation / "configuration.ini"
