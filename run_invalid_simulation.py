@@ -19,8 +19,7 @@ username = os.environ.get("GITHUB_USERNAME")
 token = os.environ.get("GITHUB_TOKEN")
 model_github = model_github.format(username=username, token=token)
 
-simulations = simulation_dir.iterdir()
-simulations = sorted(simulations)
+simulation = simulation_dir / "invalid_configuration"
 
 print("setup pcrglobwb model")
 
@@ -57,38 +56,26 @@ if not conda_commit_dir.exists():
     if status != 0:
         raise RuntimeError(f"> Failed: {status}")
 
-simulation = simulations[0]
-for simulation in simulations:
-    if "invalid" in simulation.name:
-        continue
-    print(f"simulation: {simulation}")
+# Setup
+simulation_parameter_dir = simulation / parameter_subdir
+simulation_reference_dir = simulation / reference_subdir
+simulation_commit_dir = simulation_reference_dir / commit
+configuration_out = simulation_commit_dir / "configuration.ini"
+out_out = simulation_commit_dir / "simulation.out"
+err_out = simulation_commit_dir / "simulation.err"
 
-    # Setup
-    configuration_file = simulation / "configuration.ini"
-    simulation_parameter_dir = simulation / parameter_subdir
-    simulation_reference_dir = simulation / reference_subdir
-    simulation_commit_dir = simulation_reference_dir / commit
-    completed_out = simulation_commit_dir / "completed.txt"
-    configuration_out = simulation_commit_dir / "configuration.ini"
-    time_out = simulation_commit_dir / "time.txt"
-    out_out = simulation_commit_dir / "simulation.out"
-    err_out = simulation_commit_dir / "simulation.err"
+# Cleanup
+simulation_commit_dir.mkdir(parents=True, exist_ok=True)
 
-    # Check
-    if completed_out.exists():
-        print(f"> Simulation already completed")
-        continue
+configuration_files = simulation.glob("configuration_*.ini")
+configuration_files = sorted(configuration_files)
+
+for configuration_file in configuration_files:
+    print(f"configuration: {configuration_file}")
 
     # Cleanup
-    simulation_commit_dir.mkdir(parents=True, exist_ok=True)
     if configuration_out.exists():
         configuration_out.unlink()
-    if time_out.exists():
-        time_out.unlink()
-    if out_out.exists():
-        out_out.unlink()
-    if err_out.exists():
-        err_out.unlink()
 
     # Configuration
     sh.copy(configuration_file, configuration_out)
@@ -107,10 +94,9 @@ for simulation in simulations:
         f"python {model_runner_file} {configuration_out} "
         f"1> {out_out} 2> {err_out}"
     )
-    command = f"{{ time {command} ; }} 2> {time_out}"
     status = os.system(command)
-    if status != 0:
-        raise RuntimeError(f"> Failed: {status}")
+    if status == 0:
+        raise RuntimeError(f"> Completed: {status}")
 
-    # Completion
-    completed_out.touch()
+# Cleanup
+sh.rmtree(simulation_reference_dir)
