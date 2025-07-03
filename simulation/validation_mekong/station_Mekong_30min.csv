@@ -1,0 +1,33 @@
+,2469260
+wmo_reg,2
+sub_reg,2691
+river,MEKONG RIVER
+station,PAKSE
+country,LA
+lat,15.1167
+long,105.8
+area,545000.0
+altitude,86.49
+d_start,1960.0
+d_end,1993.0
+d_yrs,34.0
+d_miss,3.663741041951848
+m_start,1980.0
+m_end,1991.0
+m_yrs,12.0
+m_miss,31.91489361702128
+t_start,1960
+t_end,1993
+t_yrs,34
+lta_discharge,9674.272
+r_volume_yr,305.0878417920001
+r_height_yr,559.7942051229359
+name,Mekong
+start_date,1983-01-01 00:00:00
+end_date,1993-12-31 00:00:00
+y,149
+x,571
+adjusted_y,149
+adjusted_x,571
+adjusted_lat,15.25
+adjusted_long,105.75

@@ -1,0 +1,33 @@
+,3206720
+wmo_reg,3
+sub_reg,3061
+river,RIO ORINOCO
+station,PUENTE ANGOSTURA
+country,VE
+lat,8.15
+long,-63.6
+area,836000.0
+altitude,20.0
+d_start,1923.0
+d_end,1989.0
+d_yrs,67.0
+d_miss,1.330486202365309
+m_start,1923.0
+m_end,1989.0
+m_yrs,67.0
+m_miss,1.25
+t_start,1923
+t_end,1989
+t_yrs,67
+lta_discharge,31208.473
+r_volume_yr,984.1904045280002
+r_height_yr,1177.261249435407
+name,Orinoco
+start_date,1979-01-01 00:00:00
+end_date,1989-12-31 00:00:00
+y,163
+x,232
+adjusted_y,163
+adjusted_x,232
+adjusted_lat,8.25
+adjusted_long,-63.75

@@ -1,0 +1,33 @@
+,5404271
+wmo_reg,5
+sub_reg,5041
+river,MURRAY RIVER
+station,LOCK 1 DOWNSTREAM
+country,AU
+lat,-34.3509
+long,139.616
+area,955018.0
+altitude,4.0
+d_start,1949.0
+d_end,2023.0
+d_yrs,75.0
+d_miss,12.33405028554476
+m_start,
+m_end,
+m_yrs,
+m_miss,
+t_start,1949
+t_end,2023
+t_yrs,75
+lta_discharge,182.108
+r_volume_yr,5.742957888
+r_height_yr,6.013455126500234
+name,Murray
+start_date,1989-01-01 00:00:00
+end_date,1999-12-31 00:00:00
+y,248
+x,639
+adjusted_y,248
+adjusted_x,640
+adjusted_lat,-34.25
+adjusted_long,140.25

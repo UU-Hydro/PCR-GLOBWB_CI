@@ -1,0 +1,33 @@
+,4115201
+wmo_reg,4
+sub_reg,4151
+river,COLUMBIA RIVER
+station,"BEAVER ARMY TERMINAL NEAR QUINCY, OR"
+country,US
+lat,46.1815
+long,-123.184
+area,665371.0
+altitude,-999.0
+d_start,1968.0
+d_end,2021.0
+d_yrs,54.0
+d_miss,39.27162833580905
+m_start,
+m_end,
+m_yrs,
+m_miss,
+t_start,1968
+t_end,2021
+t_yrs,54
+lta_discharge,6676.093
+r_volume_yr,210.537268848
+r_height_yr,316.4208672274565
+name,Colombia
+start_date,1992-01-01 00:00:00
+end_date,2002-12-31 00:00:00
+y,87
+x,113
+adjusted_y,87
+adjusted_x,113
+adjusted_lat,46.25
+adjusted_long,-123.25

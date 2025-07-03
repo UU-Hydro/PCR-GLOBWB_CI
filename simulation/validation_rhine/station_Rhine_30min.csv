@@ -1,0 +1,33 @@
+,6435060
+wmo_reg,6
+sub_reg,6351
+river,RHINE RIVER
+station,LOBITH
+country,NL
+lat,51.84
+long,6.11
+area,160800.0
+altitude,8.53
+d_start,1901.0
+d_end,2020.0
+d_yrs,120.0
+d_miss,0.0
+m_start,1901.0
+m_end,1996.0
+m_yrs,96.0
+m_miss,0.0
+t_start,1901
+t_end,2020
+t_yrs,120
+lta_discharge,2214.135
+r_volume_yr,69.82496136
+r_height_yr,434.2348343283583
+name,Rhine
+start_date,2000-01-01 00:00:00
+end_date,2010-12-31 00:00:00
+y,76
+x,372
+adjusted_y,76
+adjusted_x,372
+adjusted_lat,51.75
+adjusted_long,6.25

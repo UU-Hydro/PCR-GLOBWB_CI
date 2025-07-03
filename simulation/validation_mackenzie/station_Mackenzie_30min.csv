@@ -1,0 +1,33 @@
+,4208025
+wmo_reg,4
+sub_reg,4081
+river,MACKENZIE RIVER
+station,ARCTIC RED RIVER
+country,CA
+lat,67.458336
+long,-133.74472
+area,1660000.0
+altitude,-999.0
+d_start,1972.0
+d_end,2019.0
+d_yrs,48.0
+d_miss,1.650240660096264
+m_start,1972.0
+m_end,1996.0
+m_yrs,25.0
+m_miss,0.0
+t_start,1972
+t_end,2019
+t_yrs,48
+lta_discharge,9169.889
+r_volume_yr,289.181619504
+r_height_yr,174.2057948819277
+name,Mackenzie
+start_date,2000-01-01 00:00:00
+end_date,2010-12-31 00:00:00
+y,45
+x,92
+adjusted_y,45
+adjusted_x,93
+adjusted_lat,67.25
+adjusted_long,-133.25

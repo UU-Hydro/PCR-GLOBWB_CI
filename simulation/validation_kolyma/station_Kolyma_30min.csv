@@ -1,0 +1,33 @@
+,2998510
+wmo_reg,2
+sub_reg,2982
+river,KOLYMA
+station,KOLYMSKAYA
+country,RU
+lat,68.73
+long,158.72
+area,526000.0
+altitude,-999.0
+d_start,1978.0
+d_end,2008.0
+d_yrs,31.0
+d_miss,9.67941358297271
+m_start,1978.0
+m_end,2000.0
+m_yrs,23.0
+m_miss,0.0
+t_start,1978
+t_end,2008
+t_yrs,31
+lta_discharge,3305.222
+r_volume_yr,104.233480992
+r_height_yr,198.162511391635
+name,Kolyma
+start_date,1998-01-01 00:00:00
+end_date,2008-12-31 00:00:00
+y,42
+x,677
+adjusted_y,42
+adjusted_x,677
+adjusted_lat,68.75
+adjusted_long,158.75

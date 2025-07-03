@@ -1,0 +1,33 @@
+,1896502
+wmo_reg,1
+sub_reg,1961
+river,LIMPOPO RIVER
+station,COMBOMUNE (58510033)
+country,MZ
+lat,-23.460556
+long,32.433333
+area,266350.0
+altitude,-999.0
+d_start,1965.0
+d_end,1993.0
+d_yrs,29.0
+d_miss,3.578762100322675
+m_start,
+m_end,
+m_yrs,
+m_miss,
+t_start,1965
+t_end,1993
+t_yrs,29
+lta_discharge,103.088
+r_volume_yr,3.250983168
+r_height_yr,12.20568112633752
+name,Limpopo
+start_date,1983-01-01 00:00:00
+end_date,1993-12-31 00:00:00
+y,226
+x,424
+adjusted_y,225
+adjusted_x,423
+adjusted_lat,-22.75
+adjusted_long,31.75
